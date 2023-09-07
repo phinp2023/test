@@ -1,0 +1,28 @@
+.containerContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 30px auto;
+}
+
+.lineDark {
+    width: 100%;
+    height: 1px;
+    background-color: gray;
+}
+
+p {
+    font-size: 16px;
+    line-height: 25px;
+    text-align: center;
+}
+
+.desc {
+    color: rgb(173, 173, 173);
+    padding-bottom: 10px;
+}
+
+.copyright {
+    color: gray;
+}
