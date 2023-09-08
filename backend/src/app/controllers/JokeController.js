@@ -6,34 +6,17 @@ class JokeController {
     // [GET] /joke
     async getJokes(req, res, next) {
         try {
-            const { id_user } = req.cookies;
-
+            const { token: userId } = req.cookies;
             let user = null;
 
-            const options = {
-                expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-                httpOnly: true,
-                sameSite: 'none',
-                secure: true,
-                domain: '.vercel.app',
-            };
-
-            if (!id_user) {
+            if (!userId) {
                 user = await User.create({
                     votes: [],
                     currentVote: null,
                 });
-
-                // save id user in cookie
-                res.cookie('id_user', user._id.toString(), options);
             } else {
-                user = await User.findById(id_user);
-
+                user = await User.findById(userId);
                 if (!user) {
-                    options.expires = new Date(Date.now());
-
-                    res.cookie('id_user', null, options);
-
                     return next(new ErrorHandler('User not found!'), 400);
                 }
             }
@@ -42,13 +25,10 @@ class JokeController {
                 _id: { $nin: [...user.like, ...user.dislike] },
             });
 
-            if (!joke) {
-                return next(new ErrorHandler('Joke not found!'), 400);
-            }
-
             res.status(200).json({
                 success: true,
                 joke,
+                token: user._id,
             });
         } catch (error) {
             return next(new ErrorHandler(error.message, 500));
@@ -59,13 +39,13 @@ class JokeController {
     async voteJoke(req, res, next) {
         try {
             const { vote, currentVote } = req.body;
-            const { id_user } = req.cookies;
+            const { token: userId } = req.cookies;
 
-            if (!id_user) {
+            if (!userId) {
                 return next(new ErrorHandler('User not found!'), 400);
             }
 
-            const user = await User.findById(id_user);
+            const user = await User.findById(userId);
             if (vote) {
                 user.like.push(currentVote);
             } else {

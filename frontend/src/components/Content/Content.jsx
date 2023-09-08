@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './content.module.css';
 import { server } from '../../server';
 import Loading from '../Loading/Loading';
+import Utils from '../../utils/util';
 
 const Content = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -11,11 +12,17 @@ const Content = () => {
     useEffect(() => {
         setIsLoading(true);
         fetch(`${server}/joke`, {
+            method: 'GET',
             credentials: 'include',
         })
             .then((res) => res.json())
             .then((data) => {
-                setContent(data?.joke);
+                if (data?.token) {
+                    const tokenCookie = Utils.getCookie('token');
+                    if (tokenCookie !== data.token)
+                        Utils.setCookie('token', data.token, 7);
+                    setContent(data?.joke);
+                }
                 setIsLoading(false);
             })
             .catch((err) => {
@@ -32,9 +39,8 @@ const Content = () => {
         fetch(`${server}/joke/vote`, {
             method: 'POST',
             headers: {
-                Accept: 'application/json',
                 'Content-Type': 'application/json',
-                "Access-Control-Allow-Credentials": true,
+                'Access-Control-Allow-Credentials': true,
             },
             body: JSON.stringify({
                 vote,
