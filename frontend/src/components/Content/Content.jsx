@@ -21,15 +21,15 @@ const Content = () => {
             .then((data) => {
                 const { joke, id } = data;
                 setContent(joke);
-                setIsLoading(false);
-                if (!userId) {
+                if (!userId || userId !== id) {
                     Utils.setCookie('userId', id, 7);
                     Utils.eraseCookie('votes');
                 }
             })
             .catch((err) => {
-                setIsLoading(false);
-            });
+                console.log(err);
+            })
+            .finally(() => setIsLoading(false));
     }, []);
 
     const handleLike = (like) => {

@@ -1,6 +1,6 @@
 const ErrorHandler = require('../../utils/ErrorHandler');
 const Joke = require('../model/joke');
-const mongoose = require('mongoose');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 class JokeController {
     // [GET] /joke
@@ -8,7 +8,7 @@ class JokeController {
         try {
             let { id } = req.query;
 
-            if (!id) id = new mongoose.Types.ObjectId();
+            if (!id || ObjectId.isValid(id)) id = new ObjectId();
 
             const joke = await Joke.aggregate([
                 { $match: { 'votes.userId': { $nin: [id] } } },
