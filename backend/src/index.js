@@ -9,7 +9,7 @@ const ErrorHandler = require('./app/middlewares/error');
 const app = express();
 
 // Using cors
-app.use(cors({ origin: 'https://deploy-joke.vercel.app/', credentials: true }));
+app.use(cors({ origin: 'https://joke-frontend.vercel.app/', credentials: true }));
 
 // Add cookie
 app.use(cookieParser());
