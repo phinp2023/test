@@ -1,1 +1,1 @@
-export const server = 'https://joke-backend.vercel.app/api';
+export const server = 'https://joke-frontend.vercel.app/api/v2';

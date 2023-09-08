@@ -1,7 +1,7 @@
 const jokeRouter = require('./jokes');
 
 const route = (app) => {
-    app.use('/api/joke', jokeRouter);
+    app.use('/api/v2/joke', jokeRouter);
 };
 
 module.exports = route;
