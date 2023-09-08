@@ -34,6 +34,7 @@ const Content = () => {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                "Access-Control-Allow-Credentials": true,
             },
             body: JSON.stringify({
                 vote,

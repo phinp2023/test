@@ -15,7 +15,7 @@ class JokeController {
                 httpOnly: true,
                 sameSite: 'none',
                 secure: true,
-                domain: 'joke-frontend.vercel.app',
+                domain: '.vercel.app',
             };
 
             if (!id_user) {
