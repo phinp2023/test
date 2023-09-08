@@ -8,6 +8,8 @@ const ErrorHandler = require('./app/middlewares/error');
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 // Using cors
 app.use(cors({ origin: 'https://joke-frontend.vercel.app', credentials: true }));
 

@@ -14,7 +14,7 @@ class JokeController {
                 expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
                 httpOnly: true,
                 sameSite: 'none',
-                // secure: true,
+                secure: true,
                 domain: '.vercel.app',
             };
 
@@ -25,7 +25,6 @@ class JokeController {
                 });
 
                 // save id user in cookie
-                res.setHeader('Set-Cookie', ['ck=value; Expires=Tue, 01 Dec 2023 00:00:00 GMT; HttpOnly']);
                 res.cookie('id_user', user._id.toString(), options);
             } else {
                 user = await User.findById(id_user);
