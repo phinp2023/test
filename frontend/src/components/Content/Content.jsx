@@ -11,16 +11,18 @@ const Content = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch(`${server}/joke`, {
+        const userId = Utils.getCookie('token') ?? '';
+
+        fetch(`${server}/joke?id=${userId}`, {
             method: 'GET',
             credentials: 'include',
         })
             .then((res) => res.json())
             .then((data) => {
                 if (data?.token) {
-                    const tokenCookie = Utils.getCookie('token');
-                    if (tokenCookie !== data.token)
+                    if (!userId) {
                         Utils.setCookie('token', data.token, 7);
+                    }   
                     setContent(data?.joke);
                 }
                 setIsLoading(false);
@@ -45,6 +47,7 @@ const Content = () => {
             body: JSON.stringify({
                 vote,
                 currentVote: content._id,
+                userId: Utils.getCookie('token'),
             }),
             credentials: 'include',
         })

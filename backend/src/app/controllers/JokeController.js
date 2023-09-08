@@ -6,7 +6,7 @@ class JokeController {
     // [GET] /joke
     async getJokes(req, res, next) {
         try {
-            const { token: userId } = req.cookies;
+            const { id: userId } = req.query;
             let user = null;
 
             if (!userId) {
@@ -38,8 +38,7 @@ class JokeController {
     // [POST] /joke/vote
     async voteJoke(req, res, next) {
         try {
-            const { vote, currentVote } = req.body;
-            const { token: userId } = req.cookies;
+            const { vote, currentVote, userId } = req.body;
 
             if (!userId) {
                 return next(new ErrorHandler('User not found!'), 400);
