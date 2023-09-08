@@ -11,32 +11,36 @@ const Content = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        const userId = Utils.getCookie('token') ?? '';
+        const userId = Utils.getCookie('userId');
 
-        fetch(`${server}/joke?id=${userId}`, {
+        fetch(`${server}/joke?id=${userId ?? ''}`, {
             method: 'GET',
             credentials: 'include',
         })
             .then((res) => res.json())
             .then((data) => {
-                if (data?.token) {
-                    if (!userId) {
-                        Utils.setCookie('token', data.token, 7);
-                    }   
-                    setContent(data?.joke);
-                }
+                const { joke, id } = data;
+                setContent(joke);
                 setIsLoading(false);
+                if (!userId) {
+                    Utils.setCookie('userId', id, 7);
+                    Utils.eraseCookie('votes');
+                }
             })
             .catch((err) => {
                 setIsLoading(false);
             });
     }, []);
 
-    const handleVote = (vote) => {
+    const handleLike = (like) => {
         if (currentVote) {
             alert('You have already voted for this joke!');
             return;
         }
+        const userId = Utils.getCookie('userId');
+        const votes = Utils.getCookie('votes');
+        const dataVote = { idJoke: content._id, like };
+        let arrVotes = [dataVote];
 
         fetch(`${server}/joke/vote`, {
             method: 'POST',
@@ -44,15 +48,15 @@ const Content = () => {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Credentials': true,
             },
-            body: JSON.stringify({
-                vote,
-                currentVote: content._id,
-                userId: Utils.getCookie('token'),
-            }),
+            body: JSON.stringify({ ...dataVote, userId }),
             credentials: 'include',
         })
             .then((res) => res.json())
             .then((data) => {
+                if (votes) {
+                    arrVotes = arrVotes.concat(JSON.parse(votes));
+                }
+                Utils.setCookie('votes', JSON.stringify(arrVotes), 7);
                 setCurrentVote(content._id);
                 alert(`${data.message}\nReload the page to read a new joke!`);
             });
@@ -73,7 +77,7 @@ const Content = () => {
                     <div className={styles.action}>
                         <button
                             className={`${styles.btn} ${styles.btnFun}`}
-                            onClick={() => handleVote(true)}
+                            onClick={() => handleLike(true)}
                             disabled={!content}
                         >
                             This is Funny!
@@ -81,7 +85,7 @@ const Content = () => {
                         <button
                             type='button'
                             className={`${styles.btn} ${styles.btnNotFun}`}
-                            onClick={() => handleVote(false)}
+                            onClick={() => handleLike(false)}
                             disabled={!content}
                         >
                             This is not Funny.

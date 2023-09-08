@@ -11,6 +11,20 @@ const jokeSchema = new Schema(
             type: String,
             required: true,
         },
+        votes: [
+            {
+                userId: {
+                    type: String,
+                },
+                like: {
+                    type: Boolean,
+                },
+                createdAt: {
+                    type: Date,
+                    default: Date.now(),
+                },
+            },
+        ],
     },
     { timestamps: true }
 );
