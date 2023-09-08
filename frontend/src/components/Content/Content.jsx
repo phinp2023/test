@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styles from './content.module.css';
+import { server } from '../../server';
 
 const Content = () => {
     const [content, setContent] = useState('');
     const [currentVote, setCurrentVote] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/v2/joke', {
+        fetch(`${server}/joke`, {
             credentials: 'include',
         })
             .then((res) => res.json())
@@ -19,7 +20,7 @@ const Content = () => {
             return;
         }
 
-        fetch('http://localhost:8080/api/v2/joke/vote', {
+        fetch(`${server}/joke/vote`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -37,7 +38,7 @@ const Content = () => {
                 alert(`${data.message}\nReload the page to read a new joke!`);
             });
     };
-    
+
     return (
         <div className={`${styles.container} wrapper`}>
             <div className={styles.content}>

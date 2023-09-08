@@ -9,7 +9,7 @@ const ErrorHandler = require('./app/middlewares/error');
 const app = express();
 
 // Using cors
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: 'https://deploy-joke.vercel.app/', credentials: true }));
 
 // Add cookie
 app.use(cookieParser());
@@ -27,7 +27,7 @@ require('dotenv').config({ path: './src/config/.env' });
 connectDatabase();
 
 app.get('/', (req, res) => {
-    res.send(`Server is running at ${process.env.PORT}`);
+    res.json('Welcome to the Joke API!');
 });
 
 app.listen(process.env.PORT, () => {
