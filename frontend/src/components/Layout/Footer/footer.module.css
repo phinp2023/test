@@ -64,7 +64,7 @@ p {
 @media screen and (max-width: 640px) {
     .containerContent {
         max-width: 475px;
-        margin: 5px auto;
+        margin: 10px auto;
         padding-left: 10px;
         padding-right: 10px;
     }
