@@ -63,7 +63,7 @@ const Content = () => {
     };
 
     return (
-        <div className={`${styles.container} wrapper`}>
+        <div className={`${styles.container}`}>
             {isLoading ? (
                 <Loading />
             ) : (
@@ -88,7 +88,7 @@ const Content = () => {
                             onClick={() => handleLike(false)}
                             disabled={!content}
                         >
-                            This is not Funny.
+                            This is not funny.
                         </button>
                     </div>
                 </>
